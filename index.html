@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chinese New Year Safety Planner - The Snag Tag</title>
+<title>New Year's Eve Safety Planner - The Snag Tag</title>
 <style>
   :root{
     --bg:#faf8f4;
@@ -238,7 +238,7 @@
     <div class="brand">
       <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/></svg></div>
       <div>
-        <h1>Chinese New Year Safety Planner</h1>
+        <h1>New Year's Eve Safety Planner</h1>
         <p>The Snag Tag &middot; Event Safety Series</p>
       </div>
     </div>
@@ -254,7 +254,7 @@
     <div class="modal">
       <span class="why-badge">Why you have this</span>
       <h2>Welcome. Here's exactly what this does for you.</h2>
-      <p>Chinese New Year brings firecrackers, lanterns and string lights, and a reunion dinner table that runs for hours with grandparents and children in the same busy kitchen. These cause real harm every year, and until now there's never been an easy way for an everyday host to check for them.</p>
+      <p>New Year's Eve combines fireworks at midnight, a full bar, a late-night crowd, and guests figuring out how to get home safely, all in one night. These cause real harm every year, and until now there's never been an easy way for an everyday host to check for them.</p>
       <p>This isn't about fear. It's the same hazard-and-control thinking used on licensed worksites, built by an HSE professional (NEBOSH/OSHA trained) and simplified so you can use it in under five minutes before hosting anything, big or small.</p>
       <div class="m-steps">
         <div class="m-step"><b>1</b><div>Tell us what's part of your gathering, fire, food, kids, alcohol, whatever applies.</div></div>
@@ -280,7 +280,7 @@
       <path d="M20 150 L60 100 L95 130 L135 65 L175 120 L230 150" stroke="var(--moss)" stroke-width="2" fill="none" opacity=".5"/>
       <circle cx="185" cy="35" r="16" fill="var(--clay)" opacity=".55"/>
     </svg>
-    <h2>Firecrackers, red lanterns, and a table that never stops filling up. Here's the plan for reunion dinners nobody else writes down.</h2>
+    <h2>Fireworks at midnight, a full bar, and a house full of guests. Here's the plan nobody sends with the invite.</h2>
     <p>Tell us what's part of your gathering. We'll build a hazard-and-control plan for exactly that, grounded in recognised safety standards, not guesswork.</p>
     <div class="steps">
       <div class="step"><b>1</b> Tell us what's happening</div>
@@ -392,7 +392,7 @@
   </div>
 
   <footer>
-    <div>Chinese New Year Safety Planner v1.0 &middot; The Snag Tag &middot; part of the Event Safety Series</div>
+    <div>New Year's Eve Safety Planner v1.0 &middot; The Snag Tag &middot; part of the Event Safety Series</div>
     <div>Nothing you enter here leaves your device. There is no account, no tracking, and no data collection. Your plan is saved locally in this browser only.</div>
     <div>This tool provides general hazard-awareness guidance based on published safety standards and is not a substitute for your local fire authority, council event permit requirements, or a qualified safety professional. Distances and figures noted as jurisdiction-specific should always be confirmed against your local regulations before a public or large-scale event.</div>
   </footer>
@@ -408,10 +408,10 @@
   function applyTheme(t){
     root.setAttribute('data-theme', t);
     themeBtn.textContent = t === 'dark' ? 'Dark mode' : 'Light mode';
-    try{ localStorage.setItem('espc_theme', t); }catch(e){}
+    try{ localStorage.setItem('espn_theme', t); }catch(e){}
   }
   var savedTheme = 'light';
-  try{ savedTheme = localStorage.getItem('espc_theme') || 'light'; }catch(e){}
+  try{ savedTheme = localStorage.getItem('espn_theme') || 'light'; }catch(e){}
   applyTheme(savedTheme);
   themeBtn.addEventListener('click', function(){
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -420,7 +420,7 @@
   // ---------- welcome modal ----------
   var welcomeModal = document.getElementById('welcomeModal');
   var dontShowAgain = document.getElementById('dontShowAgain');
-  var SEEN_KEY = 'espc_seen_intro';
+  var SEEN_KEY = 'espn_seen_intro';
   function openWelcome(){ welcomeModal.classList.add('show'); }
   function closeWelcome(){ welcomeModal.classList.remove('show'); }
   var optedOut = false;
@@ -458,7 +458,7 @@
   document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
   document.getElementById('resetBtn').addEventListener('click', function(){
     if(confirm('Clear everything and start over?')){
-      try{ localStorage.removeItem('espc_state'); }catch(e){}
+      try{ localStorage.removeItem('espn_state'); }catch(e){}
       location.reload();
     }
   });
@@ -519,7 +519,7 @@
 
   // DEFAULT_TOGGLES: pre-selected on first open only (empty for the universal version).
   // Event-specific editions replace this array with hazards typical for that occasion.
-  var DEFAULT_TOGGLES = ['fireworks', 'fire', 'electrical', 'food', 'elderly', 'children'];
+  var DEFAULT_TOGGLES = ['fireworks', 'alcohol', 'noise', 'night', 'parking'];
 
   var grid = document.getElementById('toggleGrid');
   TOGGLES.forEach(function(t){
@@ -924,7 +924,7 @@
   var ringFg = document.getElementById('ringFg');
   var CIRC = 2 * Math.PI * 46;
 
-  var STATE_KEY = 'espc_state';
+  var STATE_KEY = 'espn_state';
   function loadState(){
     try{ return JSON.parse(localStorage.getItem(STATE_KEY) || '{}'); }catch(e){ return {}; }
   }
@@ -1075,7 +1075,7 @@
     ]}
   ];
 
-  var PLAN_KEY = 'espc_plan_checks';
+  var PLAN_KEY = 'espn_plan_checks';
   function loadPlanChecks(){
     try{ return JSON.parse(localStorage.getItem(PLAN_KEY) || '{}'); }catch(e){ return {}; }
   }
