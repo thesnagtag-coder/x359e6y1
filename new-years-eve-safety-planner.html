@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Year's Eve Safety Planner - The Snag Tag</title>
+<style>
+  :root{
+    --bg:#faf8f4;
+    --bg-panel:#ffffff;
+    --bg-soft:#f2efe8;
+    --ink:#2c2a25;
+    --ink-soft:#6b6558;
+    --line:#e3ddd0;
+    --sage:#7c8b6f;
+    --sage-deep:#5c6b52;
+    --clay:#b5714a;
+    --stone:#a89f8e;
+    --moss:#4f5d46;
+    --alert:#b5474a;
+    --warn:#c08a2e;
+    --ok:#5c8a5a;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(44,42,37,.04), 0 4px 16px rgba(44,42,37,.05);
+    --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  }
+  [data-theme="dark"]{
+    --bg:#20221f;
+    --bg-panel:#282a26;
+    --bg-soft:#2e3129;
+    --ink:#eee9df;
+    --ink-soft:#b3ab9b;
+    --line:#3c3e37;
+    --sage:#93a486;
+    --sage-deep:#a9b89c;
+    --clay:#c98a63;
+    --stone:#8b8474;
+    --moss:#a9b89c;
+    --shadow:0 1px 2px rgba(0,0,0,.2), 0 4px 20px rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); font-family:var(--font);
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(124,139,111,.09) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+  header.top{
+    padding:28px 20px 22px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    background:var(--bg-panel);
+  }
+  header.top .brand{display:flex; align-items:center; gap:12px;}
+  .mark{
+    width:38px; height:38px; border-radius:10px; background:var(--sage);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .mark svg{width:20px; height:20px;}
+  .brand h1{font-family:var(--serif); font-size:1.05rem; margin:0; font-weight:600; letter-spacing:.2px;}
+  .brand p{margin:1px 0 0; font-size:.72rem; color:var(--ink-soft); letter-spacing:.5px; text-transform:uppercase;}
+  .top-actions{display:flex; gap:8px; flex-wrap:wrap;}
+  button{font-family:var(--font); cursor:pointer;}
+  .btn{
+    border:1px solid var(--line); background:var(--bg-panel); color:var(--ink);
+    padding:8px 14px; border-radius:999px; font-size:.8rem; font-weight:600;
+    display:inline-flex; align-items:center; gap:6px; transition:.15s;
+  }
+  .btn:hover{border-color:var(--sage); color:var(--sage-deep);}
+  .btn.primary{background:var(--sage); color:#fff; border-color:var(--sage);}
+  .btn.primary:hover{background:var(--sage-deep); border-color:var(--sage-deep); color:#fff;}
+  .hero{padding:44px 0 10px; position:relative; overflow:hidden;}
+  .hero-motif{position:absolute; top:-10px; right:-10px; width:230px; height:170px; opacity:.5; pointer-events:none;}
+  [data-theme="dark"] .hero-motif{opacity:.28;}
+  .hero h2{font-family:var(--serif); font-size:2.05rem; line-height:1.25; margin:0 0 12px; font-weight:600; max-width:600px; position:relative;}
+  .hero p{color:var(--ink-soft); max-width:520px; margin:0 0 22px; font-size:.98rem; position:relative;}
+  .steps{display:flex; gap:0; flex-wrap:wrap; position:relative;}
+  .steps .step{display:flex; align-items:center; gap:8px; font-size:.76rem; color:var(--ink-soft); font-weight:600;}
+  .steps .step b{
+    width:20px; height:20px; border-radius:50%; background:var(--bg-soft); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:.68rem; color:var(--sage-deep); flex-shrink:0;
+  }
+  .steps .sep{width:26px; height:1px; background:var(--line); margin:0 10px; align-self:center;}
+  section.card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; margin-top:22px; box-shadow:var(--shadow);
+  }
+  .card h3{font-family:var(--serif); font-size:1.15rem; margin:0 0 4px;}
+  .card .sub{color:var(--ink-soft); font-size:.85rem; margin:0 0 18px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px;}
+  .toggle{
+    border:1px solid var(--line); border-radius:12px; padding:14px;
+    display:flex; align-items:flex-start; gap:11px; cursor:pointer; background:var(--bg-soft);
+    transition:.15s;
+  }
+  .toggle:hover{border-color:var(--sage); transform:translateY(-1px);}
+  .toggle.active{border-color:var(--sage); background:rgba(124,139,111,.13); box-shadow:inset 0 0 0 1px var(--sage);}
+  .toggle input{position:absolute; opacity:0; width:0; height:0;}
+  .t-icon{
+    width:34px; height:34px; border-radius:9px; background:var(--bg-panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--sage-deep); transition:.15s;
+  }
+  .t-icon svg{width:17px; height:17px;}
+  .toggle.active .t-icon{background:var(--sage); border-color:var(--sage); color:#fff;}
+  .toggle .t-label{font-weight:600; font-size:.86rem;}
+  .toggle .t-desc{font-size:.73rem; color:var(--ink-soft); margin-top:2px; line-height:1.4;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:.8rem; font-weight:600; margin-bottom:6px; color:var(--ink);}
+  .field .hint{font-size:.73rem; color:var(--ink-soft); margin-top:5px;}
+  select, input[type=number]{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line);
+    background:var(--bg-panel); color:var(--ink); font-family:var(--font); font-size:.88rem;
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:600px){.row2{grid-template-columns:1fr;}}
+  .dash{display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center;}
+  @media (max-width:560px){.dash{grid-template-columns:1fr;}}
+  .score-ring{position:relative; width:110px; height:110px;}
+  .score-ring svg{transform:rotate(-90deg);}
+  .score-ring .num{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+  }
+  .score-ring .num b{font-size:1.5rem; font-family:var(--serif);}
+  .score-ring .num span{font-size:.62rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.5px;}
+  .dash-list{display:flex; flex-direction:column; gap:8px;}
+  .dash-item{display:flex; justify-content:space-between; font-size:.83rem; padding:6px 0; border-bottom:1px dashed var(--line);}
+  .dash-item:last-child{border-bottom:none;}
+  .pill{font-size:.68rem; font-weight:700; padding:2px 9px; border-radius:999px; text-transform:uppercase; letter-spacing:.3px;}
+  .pill.ok{background:rgba(92,138,90,.15); color:var(--ok);}
+  .pill.warn{background:rgba(192,138,46,.15); color:var(--warn);}
+  .pill.alert{background:rgba(181,71,74,.15); color:var(--alert);}
+  .module{
+    border:1px solid var(--line); border-left:4px solid var(--m-accent, var(--sage));
+    border-radius:12px; margin-bottom:14px; overflow:hidden; background:var(--bg-panel);
+    transition:box-shadow .15s;
+  }
+  .module.open{box-shadow:var(--shadow);}
+  .module-head{
+    padding:15px 18px; display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; gap:12px; background:var(--bg-soft);
+  }
+  .module-head .mh-left{display:flex; align-items:center; gap:12px; min-width:0;}
+  .m-icon{
+    width:36px; height:36px; border-radius:10px; background:var(--m-accent, var(--sage));
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#fff;
+  }
+  .m-icon svg{width:18px; height:18px;}
+  .module-head h4{margin:0; font-size:.95rem; font-family:var(--serif);}
+  .module-head .flag{font-size:.7rem; color:var(--ink-soft);}
+  .module-head .mh-right{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+  .module-body{padding:0 18px 18px; display:none;}
+  .module.open .module-body{display:block;}
+  .why{font-size:.85rem; color:var(--ink-soft); margin:12px 0 14px; padding:12px 14px; background:var(--bg-soft); border-left:3px solid var(--clay); border-radius:6px;}
+  .standard{
+    font-size:.78rem; background:var(--bg-soft); border:1px solid var(--line); border-radius:8px;
+    padding:10px 12px; margin:0 0 14px; color:var(--ink-soft);
+  }
+  .standard b{color:var(--ink); font-weight:700;}
+  .standard cite{font-style:normal; display:block; margin-top:4px; font-size:.7rem; opacity:.85;}
+  .checklist{list-style:none; margin:0; padding:0;}
+  .checklist li{display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:.86rem;}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist input{margin-top:3px; accent-color:var(--sage-deep); width:16px; height:16px; flex-shrink:0;}
+  .checklist label{cursor:pointer;}
+  .arrow{transition:.2s; font-size:.85rem; color:var(--ink-soft);}
+  .module.open .arrow{transform:rotate(90deg);}
+  .verify{font-size:.72rem; color:var(--warn); margin-top:6px; display:flex; gap:6px; align-items:flex-start;}
+  footer{margin-top:30px; padding-top:20px; border-top:1px solid var(--line); font-size:.72rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;}
+  .empty-state{text-align:center; padding:40px 20px; color:var(--ink-soft); font-size:.9rem;}
+  .tabs{display:flex; gap:6px; margin-top:26px; position:relative; background:var(--bg-soft); border:1px solid var(--line); border-radius:999px; padding:4px; width:fit-content;}
+  .tab-btn{
+    border:none; background:transparent; color:var(--ink-soft); font-weight:700; font-size:.8rem;
+    padding:9px 18px; border-radius:999px; transition:.15s;
+  }
+  .tab-btn.active{background:var(--bg-panel); color:var(--ink); box-shadow:var(--shadow);}
+  .view{display:none;}
+  .view.active{display:block;}
+  .dash-head{display:flex; justify-content:space-between; align-items:center; cursor:pointer;}
+  .dash-head .chevron{transition:.2s; color:var(--ink-soft); font-size:.85rem;}
+  .dash-card{position:sticky; top:12px; z-index:20;}
+  .dash-card.collapsed .dash{display:none;}
+  .dash-card.collapsed .chevron{transform:rotate(-90deg);}
+  .dash-card.collapsed{padding-bottom:18px;}
+  .dash-head-right{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+  .mini-pct{display:none; font-weight:700; font-size:.8rem; padding:5px 12px; border-radius:999px; white-space:nowrap;}
+  .dash-card.collapsed .mini-pct{display:inline-block;}
+  .mini-pct.ok{background:rgba(92,138,90,.15); color:var(--ok);}
+  .mini-pct.warn{background:rgba(192,138,46,.15); color:var(--warn);}
+  .mini-pct.alert{background:rgba(181,71,74,.15); color:var(--alert);}
+  .plan-section{margin-bottom:22px;}
+  .plan-section h4{font-family:var(--serif); font-size:1rem; margin:0 0 4px; color:var(--sage-deep);}
+  .plan-section .p-sub{font-size:.78rem; color:var(--ink-soft); margin:0 0 10px;}
+  .modal-back{
+    position:fixed; inset:0; background:rgba(32,30,25,.5); display:none;
+    align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-back.show{display:flex;}
+  .modal{
+    background:var(--bg-panel); border-radius:18px; max-width:560px; width:100%;
+    max-height:88vh; overflow-y:auto; padding:32px; box-shadow:0 10px 40px rgba(0,0,0,.2);
+    position:relative;
+  }
+  .modal h2{font-family:var(--serif); font-size:1.4rem; margin:6px 0 14px;}
+  .modal p{font-size:.9rem; color:var(--ink-soft); margin:0 0 14px;}
+  .modal .why-badge{
+    display:inline-flex; align-items:center; gap:6px; background:var(--bg-soft); border:1px solid var(--line);
+    border-radius:999px; padding:5px 12px; font-size:.7rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.4px; color:var(--sage-deep); margin-bottom:14px;
+  }
+  .modal .trust-row{display:flex; gap:10px; flex-wrap:wrap; margin:18px 0;}
+  .modal .trust-item{
+    flex:1; min-width:140px; background:var(--bg-soft); border:1px solid var(--line); border-radius:10px;
+    padding:12px; font-size:.75rem; color:var(--ink-soft);
+  }
+  .modal .trust-item b{display:block; color:var(--ink); font-size:.8rem; margin-bottom:2px;}
+  .modal .m-steps{display:flex; flex-direction:column; gap:10px; margin:16px 0;}
+  .modal .m-step{display:flex; gap:12px; align-items:flex-start; font-size:.85rem;}
+  .modal .m-step b{
+    width:24px; height:24px; border-radius:50%; background:var(--sage); color:#fff; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:.75rem;
+  }
+  @media print{
+    header.top .top-actions, .field, .grid, #intakeCard, .btn, .modal-back, .tabs{display:none !important;}
+    .module-body{display:block !important;}
+    .module-head .arrow{display:none;}
+    body{background:#fff;}
+    section.card{box-shadow:none; border:1px solid #ccc;}
+  }
+
+  .trad-intro{color:var(--ink-soft); font-size:.88rem; margin:0 0 18px; max-width:640px;}
+  .trad-card{border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:12px; background:var(--bg-soft);}
+  .trad-card h4{font-family:var(--serif); font-size:1rem; margin:0 0 4px;}
+  .trad-note{font-size:.82rem; color:var(--ink-soft); margin:0 0 8px; line-height:1.5;}
+  .trad-safety{font-size:.83rem; margin:0; line-height:1.55; padding:10px 12px; border-radius:9px; background:var(--bg-panel); border:1px solid var(--line);}
+  .trad-safety b{color:var(--sage-deep);}
+  .trad-custom{border-style:dashed;}
+  .trad-custom .trad-del{float:right; background:none; border:none; color:var(--ink-soft); font-size:.75rem; cursor:pointer; padding:2px 6px;}
+  .trad-custom .trad-del:hover{color:var(--alert);}
+  .trad-add{margin-top:20px; padding-top:18px; border-top:1px solid var(--line);}
+  .trad-add .row2{margin-bottom:10px;}
+  textarea.trad-input{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--bg-panel); color:var(--ink); font-family:var(--font); font-size:.85rem; min-height:64px; resize:vertical;}
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/></svg></div>
+      <div>
+        <h1>New Year's Eve Safety Planner</h1>
+        <p>The Snag Tag &middot; Event Safety Series</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="aboutBtn">Why this exists</button>
+      <button class="btn" id="themeBtn">Light mode</button>
+      <button class="btn" id="printBtn">Print / Save PDF</button>
+      <button class="btn" id="resetBtn">Reset</button>
+    </div>
+  </header>
+
+  <div class="modal-back" id="welcomeModal">
+    <div class="modal">
+      <span class="why-badge">Why you have this</span>
+      <h2>Welcome. Here's exactly what this does for you.</h2>
+      <p>New Year's Eve combines fireworks at midnight, a full bar, a late-night crowd, and guests figuring out how to get home safely, all in one night. These cause real harm every year, and until now there's never been an easy way for an everyday host to check for them.</p>
+      <p>This isn't about fear. It's the same hazard-and-control thinking used on licensed worksites, built by an HSE professional (NEBOSH/OSHA trained) and simplified so you can use it in under five minutes before hosting anything, big or small.</p>
+      <div class="m-steps">
+        <div class="m-step"><b>1</b><div>Tell us what's part of your gathering, fire, food, kids, alcohol, whatever applies.</div></div>
+        <div class="m-step"><b>2</b><div>We build a hazard-and-control plan for exactly that, nothing you don't need.</div></div>
+        <div class="m-step"><b>3</b><div>Check items off as you go, print it, or keep it on your phone while you host.</div></div>
+      </div>
+      <div class="trust-row">
+        <div class="trust-item"><b>Nothing guessed</b>Every standard cited comes from a recognised source (CPSC, FDA/FSIS, HSE UK, NOAA, NIOSH).</div>
+        <div class="trust-item"><b>Fully private</b>Nothing you enter ever leaves this device. No account, no tracking.</div>
+        <div class="trust-item"><b>Yours for good</b>One file, every future gathering. No subscription, no app to maintain.</div>
+      </div>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; color:var(--ink-soft); margin-bottom:14px; cursor:pointer;">
+        <input type="checkbox" id="dontShowAgain" style="width:15px; height:15px; accent-color:var(--sage-deep);">
+        Don't show this again
+      </label>
+      <button class="btn primary" id="welcomeStart" style="width:100%; justify-content:center; padding:12px;">Start my safety plan</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <svg class="hero-motif" viewBox="0 0 230 170" fill="none">
+      <path d="M0 140 L45 80 L75 110 L120 45 L165 105 L200 70 L230 140 Z" fill="var(--sage)" opacity=".35"/>
+      <path d="M20 150 L60 100 L95 130 L135 65 L175 120 L230 150" stroke="var(--moss)" stroke-width="2" fill="none" opacity=".5"/>
+      <circle cx="185" cy="35" r="16" fill="var(--clay)" opacity=".55"/>
+    </svg>
+    <h2>Fireworks at midnight, a full bar, and a house full of guests. Here's the plan nobody sends with the invite.</h2>
+    <p>Tell us what's part of your gathering. We'll build a hazard-and-control plan for exactly that, grounded in recognised safety standards, not guesswork.</p>
+    <div class="steps">
+      <div class="step"><b>1</b> Tell us what's happening</div>
+      <div class="sep"></div>
+      <div class="step"><b>2</b> Get your hazard plan</div>
+      <div class="sep"></div>
+      <div class="step"><b>3</b> Check off, print, host safely</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-view="safety">Safety plan</button>
+      <button class="tab-btn" data-view="checklist">Event checklist</button>
+      <button class="tab-btn" data-view="traditions">Traditions</button>
+    </div>
+  </div>
+
+  <div class="view active" id="view-safety">
+
+  <section class="card" id="intakeCard">
+    <h3>What's part of your gathering?</h3>
+    <p class="sub">Select everything that applies. Your plan updates to match.</p>
+    <div class="grid" id="toggleGrid"></div>
+
+    <div class="row2" style="margin-top:20px;">
+      <div class="field">
+        <label>Expected number of guests</label>
+        <input type="number" id="guestCount" min="1" placeholder="e.g. 25">
+      </div>
+      <div class="field">
+        <label>Venue type</label>
+        <select id="venueType">
+          <option value="home">Home / garden</option>
+          <option value="hall">Indoor hall or venue</option>
+          <option value="marquee">Marquee / tent</option>
+          <option value="open">Open outdoor area</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Usable space size (optional, for crowd density)</label>
+        <input type="number" id="venueSize" min="1" placeholder="e.g. 40">
+      </div>
+      <div class="field">
+        <label>Units</label>
+        <select id="venueUnit">
+          <option value="sqm">Square metres (m&sup2;)</option>
+          <option value="sqft">Square feet (ft&sup2;)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn primary" id="buildBtn">Build my safety plan</button>
+  </section>
+
+  <section class="card dash-card" id="dashCard" style="display:none;">
+    <div class="dash-head" id="dashHead">
+      <div>
+        <h3>Readiness overview</h3>
+        <p class="sub" style="margin-bottom:0;">Updates live as you check off actions below.</p>
+      </div>
+      <div class="dash-head-right">
+        <span class="mini-pct alert" id="miniPct">0% ready</span>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+    <div class="dash">
+      <div class="score-ring">
+        <svg width="110" height="110">
+          <circle cx="55" cy="55" r="46" stroke="var(--line)" stroke-width="10" fill="none"/>
+          <circle id="ringFg" cx="55" cy="55" r="46" stroke="var(--sage)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289"/>
+        </svg>
+        <div class="num"><b id="scoreNum">0%</b><span>Ready</span></div>
+      </div>
+      <div class="dash-list" id="dashList"></div>
+    </div>
+  </section>
+
+  <section id="modulesWrap"></section>
+
+  </div>
+
+  <div class="view" id="view-checklist">
+    <section class="card dash-card" id="planDashCard">
+      <div class="dash-head" id="planDashHead">
+        <div>
+          <h3>Planning overview</h3>
+          <p class="sub" style="margin-bottom:0;">Updates live as you check off items below.</p>
+        </div>
+        <div class="dash-head-right">
+          <span class="mini-pct alert" id="planMiniPct">0% planned</span>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="dash">
+        <div class="score-ring">
+          <svg width="110" height="110">
+            <circle cx="55" cy="55" r="46" stroke="var(--line)" stroke-width="10" fill="none"/>
+            <circle id="planRingFg" cx="55" cy="55" r="46" stroke="var(--sage)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289"/>
+          </svg>
+          <div class="num"><b id="planScoreNum">0%</b><span>Planned</span></div>
+        </div>
+        <div class="dash-list" id="planDashList"></div>
+      </div>
+    </section>
+
+    <section class="card" id="checklistCard">
+      <h3>Event planning checklist</h3>
+      <p class="sub">The logistics side of hosting, separate from your safety plan above. Also saved locally as you go.</p>
+      <div id="planWrap"></div>
+    </section>
+  </div>
+
+  
+  <div class="view" id="view-traditions">
+    <section class="card" id="traditionsCard">
+      <h3>Typical traditions - and how to make them safe</h3>
+      <p class="trad-intro" id="tradIntro"></p>
+      <div id="tradList"></div>
+      <div class="trad-add">
+        <h4 style="font-family:var(--serif); font-size:.95rem; margin:0 0 10px;">Add your own tradition</h4>
+        <p class="sub" style="margin:0 0 12px;">Not on the list? Add a tradition specific to your gathering, with your own safety note. It's saved locally, just like the rest of your plan.</p>
+        <div class="field">
+          <label>Tradition name</label>
+          <input type="text" id="tradNameInput" placeholder="e.g. Family talent show">
+        </div>
+        <div class="field">
+          <label>Safety note</label>
+          <textarea class="trad-input" id="tradSafetyInput" placeholder="How do you want to keep this one safe?"></textarea>
+        </div>
+        <button class="btn primary" id="tradAddBtn">Add tradition</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div>New Year's Eve Safety Planner v1.0 &middot; The Snag Tag &middot; part of the Event Safety Series</div>
+    <div>Nothing you enter here leaves your device. There is no account, no tracking, and no data collection. Your plan is saved locally in this browser only.</div>
+    <div>This tool provides general hazard-awareness guidance based on published safety standards and is not a substitute for your local fire authority, council event permit requirements, or a qualified safety professional. Distances and figures noted as jurisdiction-specific should always be confirmed against your local regulations before a public or large-scale event.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- theme ----------
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('themeBtn');
+  function applyTheme(t){
+    root.setAttribute('data-theme', t);
+    themeBtn.textContent = t === 'dark' ? 'Dark mode' : 'Light mode';
+    try{ localStorage.setItem('espn_theme', t); }catch(e){}
+  }
+  var savedTheme = 'light';
+  try{ savedTheme = localStorage.getItem('espn_theme') || 'light'; }catch(e){}
+  applyTheme(savedTheme);
+  themeBtn.addEventListener('click', function(){
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---------- welcome modal ----------
+  var welcomeModal = document.getElementById('welcomeModal');
+  var dontShowAgain = document.getElementById('dontShowAgain');
+  var SEEN_KEY = 'espn_seen_intro';
+  function openWelcome(){ welcomeModal.classList.add('show'); }
+  function closeWelcome(){ welcomeModal.classList.remove('show'); }
+  var optedOut = false;
+  try{ optedOut = localStorage.getItem(SEEN_KEY) === '1'; }catch(e){}
+  dontShowAgain.checked = optedOut;
+  if(!optedOut){ openWelcome(); }
+  document.getElementById('welcomeStart').addEventListener('click', function(){
+    closeWelcome();
+    try{ localStorage.setItem(SEEN_KEY, dontShowAgain.checked ? '1' : '0'); }catch(e){}
+  });
+  document.getElementById('aboutBtn').addEventListener('click', openWelcome);
+  welcomeModal.addEventListener('click', function(e){
+    if(e.target === welcomeModal){ closeWelcome(); }
+  });
+
+  // ---------- tabs ----------
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var v = btn.getAttribute('data-view');
+      document.getElementById('view-safety').classList.toggle('active', v === 'safety');
+      document.getElementById('view-checklist').classList.toggle('active', v === 'checklist');
+      document.getElementById('view-traditions').classList.toggle('active', v === 'traditions');
+    });
+  });
+
+  // ---------- dashboard collapse ----------
+  document.getElementById('dashHead').addEventListener('click', function(){
+    document.getElementById('dashCard').classList.toggle('collapsed');
+  });
+  document.getElementById('planDashHead').addEventListener('click', function(){
+    document.getElementById('planDashCard').classList.toggle('collapsed');
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(confirm('Clear everything and start over?')){
+      try{ localStorage.removeItem('espn_state'); }catch(e){}
+      location.reload();
+    }
+  });
+
+  // ---------- icons & accent colors ----------
+  var ICONS = {
+    fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.3-2-1-3 1 4-1 5-2 5 1-2-1-3-1-5 0-2 1-3 1-4-2 0-3 2-3 4-2-1-1-3 0-4Z"/><path d="M8 15a4 4 0 1 0 8 0c0-1-.5-2-1-3"/></svg>',
+    generator:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="10" rx="2"/><path d="M17 10h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2"/><path d="M7 7V5M11 7V5"/><circle cx="7" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/></svg>',
+    water:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></svg>',
+    children:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="2.4"/><circle cx="17" cy="9" r="1.8"/><path d="M4 20c.5-4 2.5-6.5 5-6.5s4.3 2.2 4.8 5"/><path d="M14.5 19c.2-2.3 1.4-4.2 3-4.5"/></svg>',
+    elderly:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="5" r="2.2"/><path d="M6 21l2-7 2 2 1 5"/><path d="M8 14l1.5-5.5L13 10l3 1"/><path d="M16 13v8"/><path d="M13.5 17H19"/></svg>',
+    inflatable:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 0 5 2.5 5 6 0 2-1 3.5-2 4.5"/><path d="M12 3c-3 0-5 2.5-5 6 0 2 1 3.5 2 4.5"/><path d="M6 21c0-3.5 2.7-6 6-6s6 2.5 6 6"/></svg>',
+    food:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3M8 10v11M18 3c-1.7 0-3 2-3 5s1.3 5 3 5v8"/></svg>',
+    alcohol:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l-1.2 9a3 3 0 0 1-2.8 2.6v6.4M12 20.6c-1.6 0-3 .3-3 1H15c0-.7-1.4-1-3-1Z"/></svg>',
+    crowd:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.3"/><circle cx="16" cy="8" r="2.3"/><path d="M3 20c.3-3 2.3-5 5-5s4.7 2 5 5M11 20c.3-3 2.3-5 5-5s4.7 2 5 5"/></svg>',
+    electrical:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>',
+    pets:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="9" r="1.6"/><circle cx="10.5" cy="6" r="1.6"/><circle cx="14.5" cy="6" r="1.6"/><circle cx="18" cy="9.5" r="1.6"/><path d="M6 17c0-3 3-5 6.2-5S18 14 17.8 17c-.1 1.6-1.7 2.5-3.3 2-1-.3-2.2-.3-3.2 0-1.6.5-3.2-.4-3.3-2Z"/></svg>',
+    smoking:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17h14M20 17h2M16.5 17c1-1 1-3-1-4M18 13c1.5-1.3 1.5-3.4-.5-5"/></svg>',
+    weather:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="4"/><path d="M12 2v1.5M12 14.5V16M5 9h1.5M17.5 9H19M6.5 3.5l1 1M16.5 4.5l1-1M4 21h16M8 21c0-2 1.8-3.5 4-3.5s4 1.5 4 3.5"/></svg>',
+    parking:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M5 9l1.5-4h11L19 9M7 17v2M17 17v2"/><circle cx="7.5" cy="13" r=".8" fill="currentColor" stroke="none"/><circle cx="16.5" cy="13" r=".8" fill="currentColor" stroke="none"/></svg>',
+    levels:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h4v-4h4v-4h4v-4h4V4"/></svg>',
+    night:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>',
+    noise:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l5 4V6L7 10H4Z"/><path d="M17 9a4.5 4.5 0 0 1 0 6M19.5 6.5a8 8 0 0 1 0 11"/></svg>',
+    overnight:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M6 21l6-12 6 12M8.5 16h7"/></svg>',
+    fireworks:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 3l-2 2M12 3l2 2M5 10l2.5 1M19 10l-2.5 1"/><path d="M12 10v11M8 15l-2 2M16 15l2 2M9 19l-1 2M15 19l1 2"/><circle cx="12" cy="10" r="2"/></svg>',
+    turkey_fryer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11h14l-1 8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2l-1-8Z"/><path d="M3 11h18M9 11V8a3 3 0 0 1 6 0v3"/><path d="M9 4c0 1-1 1-1 2M13 4c0 1-1 1-1 2"/></svg>'
+  };
+  var ACCENTS = {
+    fire:'var(--clay)', generator:'#8a6a3f', water:'var(--sage-deep)', children:'#c07a95',
+    elderly:'var(--stone)', inflatable:'#d1a13b', food:'var(--moss)', alcohol:'#9a5a7a', crowd:'#5c7a8a',
+    electrical:'#c9a227', pets:'#7a8a5a', smoking:'#6b6558', weather:'#4a90a4',
+    parking:'#5a6b7a', levels:'#8a7a9a', night:'#3f4a6b', noise:'#a45a4a', overnight:'#5a7a6b',
+    fireworks:'#a4463c', turkey_fryer:'#b5714a'
+  };
+
+  // ---------- toggle definitions ----------
+  var TOGGLES = [
+    {id:'fire', label:'Open flame or cooking fire', desc:'Braai, fire pit, candles, unity candle, fireworks, sparklers'},
+    {id:'generator', label:'Generator or backup power', desc:'Petrol/diesel generator, gas heater, load-shedding setup'},
+    {id:'water', label:'Water feature', desc:'Pool, dam, river, paddling pool'},
+    {id:'children', label:'Children present', desc:'Includes toddlers and young children'},
+    {id:'elderly', label:'Elderly or mobility-limited guests', desc:'Reduced mobility, balance, or vision'},
+    {id:'inflatable', label:'Bouncy castle or inflatable', desc:'Any inflatable play equipment'},
+    {id:'food', label:'Food will be served', desc:'Potluck, buffet, braai, or catered'},
+    {id:'alcohol', label:'Alcohol will be served', desc:'Any alcoholic drinks available to guests'},
+    {id:'electrical', label:'Decor lighting or sound equipment', desc:'Fairy lights, extension cords, speakers, extra power draw'},
+    {id:'pets', label:'Pets or animals present', desc:'Host or guest animals on site'},
+    {id:'smoking', label:'Smoking permitted', desc:'A designated or informal smoking area'},
+    {id:'weather', label:'Outdoor heat, sun, or cold exposure', desc:'Guests exposed to the elements for extended periods'},
+    {id:'parking', label:'Parking or vehicle movement on site', desc:'Cars, trailers, or a driveway guests will cross'},
+    {id:'levels', label:'Stairs, steps, or uneven ground', desc:'Multi-level venue or an uneven outdoor surface'},
+    {id:'night', label:'Event runs into the evening or night', desc:'Guests arriving, moving around, or leaving after dark'},
+    {id:'noise', label:'Loud music or sound system', desc:'DJ, band, speakers, or amplified sound'},
+    {id:'overnight', label:'Overnight stay or multi-day event', desc:'Camping, sleepovers, or a multi-day gathering'},
+    {id:'fireworks', label:'Fireworks or sparklers', desc:'A display, firecrackers, or handheld sparklers'},
+    {id:'turkey_fryer', label:'Deep-fat turkey fryer', desc:'An outdoor propane turkey fryer or similar hot-oil cooking'}
+  ];
+
+  // DEFAULT_TOGGLES: pre-selected on first open only (empty for the universal version).
+  // Event-specific editions replace this array with hazards typical for that occasion.
+  var DEFAULT_TOGGLES = ['fireworks', 'alcohol', 'noise', 'night', 'parking'];
+
+  var grid = document.getElementById('toggleGrid');
+  TOGGLES.forEach(function(t){
+    var div = document.createElement('label');
+    div.className = 'toggle';
+    div.setAttribute('data-id', t.id);
+    div.innerHTML = '<input type="checkbox" data-id="'+t.id+'"><div class="t-icon">'+(ICONS[t.id]||'')+'</div><div><div class="t-label">'+t.label+'</div><div class="t-desc">'+t.desc+'</div></div>';
+    grid.appendChild(div);
+  });
+  grid.addEventListener('change', function(e){
+    if(e.target.matches('input[type=checkbox]')){
+      e.target.closest('.toggle').classList.toggle('active', e.target.checked);
+    }
+  });
+
+  // ---------- module content ----------
+  // Each module: id, title, trigger(state)->bool, why, standards[], checklist[]
+  function buildModules(state){
+    var mods = [];
+
+    if(state.fire){
+      mods.push({
+        id:'fire', title:'Open flame & cooking fire',
+        why:'Open flames near tents, decorations, or dry vegetation are a leading cause of event fires. Most hosts plan the fire itself, not the clearance around it.',
+        standards:[
+          {text:'Keep open-flame cooking (braai, BBQ, fire pit) at least <b>6 m (20 ft)</b> from any tent, marquee, or temporary structure, and at least <b>1.5 m (5 ft)</b> from food service tables.', cite:'Baseline distance used in municipal fire codes for temporary event structures (e.g. San Francisco Fire Marshal Bulletin 5.10). Confirm exact distances with your local fire authority for public or large events.'},
+          {text:'Keep all cooking and heat sources at least <b>3 m (10 ft)</b> from exits, walkways, and combustible materials.', cite:'Common baseline in temporary structure fire codes; verify locally.'}
+        ],
+        checklist:[
+          'Fire/braai positioned with clear space on all sides, away from tents, decor, and dry grass',
+          'A working fire extinguisher or bucket of sand/water kept within reach of the fire',
+          'Candles and unity candles placed on stable, heat-resistant surfaces, away from fabric or hair',
+          'No open flame left unattended at any point, even briefly',
+          'Wind direction checked before lighting, sparks kept away from seating and decor',
+          'Fireworks or sparklers (if any) handled only by a sober adult, away from guests and structures'
+        ]
+      });
+    }
+
+    if(state.generator){
+      mods.push({
+        id:'generator', title:'Generator & backup power',
+        why:'Carbon monoxide is invisible and odourless. It is one of the most common causes of preventable death at gatherings using generators or braais for backup power, and almost nobody connects "generator at my party" with this risk.',
+        standards:[
+          {text:'Run generators at least <b>6 m (20 ft)</b> from the home or any occupied structure, with exhaust directed away from windows, doors, and vents.', cite:'US Consumer Product Safety Commission (CPSC), Generator & CO Safety guidance.'},
+          {text:'Never run a generator, gas braai, or fuel-burning heater inside a garage, tent, marquee, or any partly enclosed space, even with doors open.', cite:'CPSC; consistent with international carbon monoxide safety guidance.'},
+          {text:'Install or bring a battery-powered CO alarm for indoor spaces near the event, and test it before guests arrive.', cite:'CPSC guidance on portable generator use.'}
+        ],
+        checklist:[
+          'Generator placed at least 6 m (20 ft) from the house, tent, and any occupied space',
+          'Exhaust pointed away from doors, windows, and air vents',
+          'No generator, gas heater, or fuel appliance running inside any enclosed or semi-enclosed structure',
+          'CO alarm present and tested near any indoor space close to the generator or gas appliances',
+          'Fuel stored away from the generator and any open flame',
+          'Cables from the generator routed to avoid trip hazards across walkways'
+        ]
+      });
+    }
+
+    if(state.water){
+      mods.push({
+        id:'water', title:'Water feature',
+        why:'Drowning can happen silently in under a minute, even in shallow water, and adult attention is easily split during a gathering.',
+        standards:[
+          {text:'A designated, sober adult "water watcher" should be assigned with no other responsibility whenever a pool, dam, or paddling pool is accessible to guests.', cite:'Widely recommended practice in child drowning-prevention guidance (e.g. WHO, national drowning prevention bodies).'},
+          {text:'Pool gates, covers, or barriers should be secured whenever the water feature is not in active supervised use.', cite:'Standard child-safety practice for domestic pools.'}
+        ],
+        checklist:[
+          'One sober adult assigned as dedicated water watcher during any time the water is accessible',
+          'Water watcher rotated on a schedule so attention never lapses',
+          'Pool/water access gated or covered when not in supervised use',
+          'Non-swimmers and young children kept within arm\'s reach near water',
+          'Phone and basic first aid kept poolside, not left indoors'
+        ]
+      });
+    }
+
+    if(state.inflatable){
+      mods.push({
+        id:'inflatable', title:'Bouncy castle & inflatables',
+        why:'Inflatables look like simple fun, but wind, overcrowding, and mixed age groups on the same inflatable are the leading causes of injury, and are governed by an actual safety standard almost no host has heard of.',
+        standards:[
+          {text:'Do not operate any inflatable in wind speeds above <b>39 km/h (24 mph)</b>, Force 5 on the Beaufort scale, unless the manufacturer specifies a lower limit.', cite:'BS EN 14960 (European/UK standard for inflatable play equipment); HSE (UK) bouncy castle safety advice.'},
+          {text:'Use all anchor points, minimum 6, with ground stakes at least <b>380 mm (15 in)</b> long; on hard surfaces use ballast weighing at least <b>163 kg (360 lb)</b> per the manufacturer\'s instructions.', cite:'BS EN 14960 / HSE (UK).'},
+          {text:'Never exceed the user limit stated in the equipment\'s own instructions, and always keep users supervised.', cite:'HSE (UK) bouncy castle safety advice.'}
+        ],
+        checklist:[
+          'Wind speed checked before and during use; inflatable deflated above 39 km/h (24 mph) or the manufacturer\'s stated limit',
+          'All anchor points secured per the manufacturer\'s manual (minimum 6 points outdoors)',
+          'A named adult actively supervising the inflatable at all times it is in use',
+          'User number limit and age/size mixing rules from the manufacturer\'s manual followed, not guessed',
+          'Shoes, jewellery, and sharp objects removed before use',
+          'Inflatable positioned away from fences, trees, pools, and hard surfaces'
+        ]
+      });
+    }
+
+    if(state.food){
+      mods.push({
+        id:'food', title:'Food safety for gatherings',
+        why:'Potluck and buffet-style food is one of the most common sources of foodborne illness at gatherings, because food sits at room temperature far longer than anyone realises.',
+        standards:[
+          {text:'Keep perishable food out of the "danger zone" of <b>4-60&deg;C (40-140&deg;F)</b>. Food left in this range for more than <b>2 hours</b> should be discarded.', cite:'US FDA / FSIS food safety guidance.'},
+          {text:'If the outdoor temperature is <b>32&deg;C (90&deg;F)</b> or higher, that window shortens to just <b>1 hour</b>.', cite:'US FDA guidance on handling food safely while eating outdoors.'},
+          {text:'Keep hot food at or above <b>60&deg;C (140&deg;F)</b> and cold food at or below <b>4&deg;C (40&deg;F)</b> throughout serving, refreshing ice and reheating as needed.', cite:'FDA / FSIS danger zone guidance.'}
+        ],
+        checklist:[
+          'A clock or timer used to track how long each dish has been out',
+          'Hot dishes kept above 60°C (140°F) with warming trays, slow cookers, or chafing dishes',
+          'Cold dishes kept on ice, below 4°C (40°F), with ice replenished as it melts',
+          'Any dish out for more than 2 hours (or 1 hour if 32°C/90°F or hotter) removed and discarded',
+          'Raw meat kept separate from ready-to-eat food, with separate utensils',
+          'Guests with known allergies asked in advance; dishes labelled for common allergens where possible'
+        ]
+      });
+    }
+
+    if(state.alcohol){
+      mods.push({
+        id:'alcohol', title:'Alcohol service',
+        why:'Alcohol changes judgement around fire, water, driving, and supervision, exactly the areas most other modules in this plan depend on someone staying alert.',
+        standards:[
+          {text:'Identify at least one sober adult responsible for supervision near fire, water, and any inflatable for the full duration alcohol is served.', cite:'Common-sense safety practice; not a formal regulatory standard.'},
+          {text:'Arrange transport options (designated driver, rideshare, overnight stay) before drinking begins, not after.', cite:'Widely recommended road-safety practice.'}
+        ],
+        checklist:[
+          'At least one sober adult identified for the full event, not just "whoever is free"',
+          'That person is not also the only water watcher or fire supervisor',
+          'Transport plans arranged for guests before alcohol service begins',
+          'Non-alcoholic drink options clearly available and visible',
+          'Alcohol kept out of reach of children and away from the cooking/fire area'
+        ]
+      });
+    }
+
+    if(state.elderly){
+      mods.push({
+        id:'elderly', title:'Elderly & mobility-limited guests',
+        why:'Trip hazards, seating near heat, and long standing periods are rarely considered when planning a gathering, yet falls are a leading cause of injury at family events.',
+        standards:[
+          {text:'Keep clear, level, well-lit walking paths free of cables, uneven ground cover, and loose rugs.', cite:'General fall-prevention best practice for home and event environments.'},
+          {text:'Provide seating with armrests, positioned away from direct heat sources and high-traffic paths.', cite:'General fall-prevention and heat-stress best practice.'}
+        ],
+        checklist:[
+          'Walking paths clear of cables, rugs, steps, or uneven surfaces, or clearly marked if unavoidable',
+          'Seating with armrests available, out of direct sun/heat and away from foot traffic',
+          'Accessible toilet route identified and lit if the event runs into the evening',
+          'Water and shade available, especially in hot conditions',
+          'A phone and emergency contact list kept accessible to at least one sober adult'
+        ]
+      });
+    }
+
+    if(state.children && !state.food){
+      // lightweight standalone children module if food module doesn't already cover choking risk
+    }
+    if(state.children){
+      mods.push({
+        id:'children', title:'Children present',
+        why:'Balloons, small decorations, and unfamiliar layouts create choking and access hazards that are invisible to adults but obvious in hindsight.',
+        standards:[
+          {text:'Keep uninflated or burst balloons, small toys, and decor with small detachable parts away from children under 3.', cite:'General child-safety choking-hazard best practice.'},
+          {text:'Identify one adult per small group of young children as a point of responsibility, distinct from general "everyone\'s watching" supervision.', cite:'General child-supervision best practice.'}
+        ],
+        checklist:[
+          'Balloons, confetti, and small decor kept away from children under 3',
+          'One adult clearly responsible for young children at any given time, not assumed to be "everyone"',
+          'Access to roads, driveways, and parking areas blocked or supervised',
+          'A clear, agreed meeting point set in case a child wanders off',
+          'Any medication or first aid needs for specific children known to the responsible adult'
+        ]
+      });
+    }
+
+    if(state.electrical){
+      mods.push({
+        id:'electrical', title:'Decor lighting & sound equipment',
+        why:'Fairy lights, speakers, and extension cords are treated as decoration, not electrical load, so nobody checks what a circuit is actually carrying until something trips or overheats.',
+        standards:[
+          {text:'Never connect multiple extension cords end to end ("daisy-chaining"). Use a single cord rated for the total load, or a proper outdoor-rated power distribution box.', cite:'General electrical safety practice for temporary event wiring.'},
+          {text:'Use only cords and fittings rated for outdoor/wet conditions when running power across grass, near water, or in the open, and keep all connections off the ground.', cite:'General electrical safety practice for outdoor events.'}
+        ],
+        checklist:[
+          'No extension cords daisy-chained end to end',
+          'Outdoor-rated cords and connectors used for anything outside or near water',
+          'Cables taped down or routed away from walkways, not left as a trip hazard',
+          'Power points and cords kept away from any water feature, sprinkler, or damp ground',
+          'Total load on a single circuit not exceeding what it is rated for (check the plug/socket rating if unsure)'
+        ]
+      });
+    }
+
+    if(state.pets){
+      mods.push({
+        id:'pets', title:'Pets & animals present',
+        why:'A calm home pet can behave very differently around a crowd of unfamiliar people, especially children, loud noise, or fireworks.',
+        standards:[
+          {text:'Provide animals with a quiet, separate space to retreat to away from crowds, noise, and food areas.', cite:'General animal-welfare and guest-safety best practice.'}
+        ],
+        checklist:[
+          'A quiet space set up away from the crowd for any resident pets',
+          'Guests (especially children) briefed not to approach or feed animals without permission',
+          'Animals kept away from the fire, food table, and pool area',
+          'A plan for where pets go during fireworks, loud music, or a large crowd surge',
+          'Water available for any animals present, especially in hot weather'
+        ]
+      });
+    }
+
+    if(state.smoking){
+      mods.push({
+        id:'smoking', title:'Smoking area',
+        why:'A smoking area located near dry grass, decorations, fuel, or fabric turns an ordinary habit into the easiest fire risk at the whole event.',
+        standards:[
+          {text:'Position any smoking area away from open flame, fuel storage, decorations, and dry vegetation, with a proper container for extinguishing butts.', cite:'General fire-prevention best practice for temporary events.'}
+        ],
+        checklist:[
+          'Smoking area located away from decor, dry grass, and fuel/generator storage',
+          'A sand bucket or metal container provided for extinguishing cigarettes safely',
+          'Smoking kept clear of the food table and any inflatable or play area',
+          'Area visible enough that a stray ember or dropped cigarette would be noticed'
+        ]
+      });
+    }
+
+    if(state.weather){
+      mods.push({
+        id:'weather', title:'Heat, sun & weather exposure',
+        why:'Heat-related illness builds up quietly over hours, well before anyone looks unwell, and hosts rarely plan shade and water the way they plan food and music.',
+        standards:[
+          {text:'At a heat index of <b>27-32&deg;C (80-90&deg;F)</b>, fatigue is possible with prolonged exposure. From <b>32-41&deg;C (90-105&deg;F)</b> ("extreme caution"), heat exhaustion becomes possible. Above <b>41&deg;C (105&deg;F)</b> ("danger"), heat exhaustion and heatstroke are likely with continued exposure.', cite:'NOAA / US National Weather Service Heat Index classification.'},
+          {text:'Provide shaded areas, accessible drinking water, and breaks from direct sun, especially for children, elderly guests, and anyone dancing or playing actively.', cite:'General heat-stress prevention practice.'}
+        ],
+        checklist:[
+          'Shaded seating or a covered area available for the full event',
+          'Drinking water clearly available and visible, not just drinks that dehydrate (alcohol, sugary drinks)',
+          'Peak sun hours considered when timing outdoor activities',
+          'Sunscreen or shade specifically offered for children\'s play areas',
+          'A cool, sheltered space identified in case someone shows signs of heat illness (dizziness, nausea, confusion)'
+        ]
+      });
+    }
+
+    if(state.parking){
+      mods.push({
+        id:'parking', title:'Parking & vehicle movement',
+        why:'Driveways and parking areas mix moving vehicles with distracted guests and children in a way that almost never gets planned in advance.',
+        standards:[
+          {text:'Separate pedestrian walking routes from any area where vehicles are arriving, parking, or reversing.', cite:'General traffic-safety best practice for events on private property.'}
+        ],
+        checklist:[
+          'A clear route for guests to walk that avoids reversing or moving vehicles',
+          'Children briefed (or supervised) around any driveway or parking area',
+          'Someone directing arrivals if parking is tight or on a road',
+          'Emergency vehicle access kept clear at all times, not blocked by parked cars'
+        ]
+      });
+    }
+
+    if(state.levels){
+      mods.push({
+        id:'levels', title:'Stairs, steps & uneven ground',
+        why:'Steps and uneven surfaces are the most common cause of falls at gatherings, and they\'re invisible to the host because they already know where every step is.',
+        standards:[
+          {text:'Keep steps and level changes well lit and free of clutter, cables, or décor, marking any less obvious change in level.', cite:'General fall-prevention best practice.'}
+        ],
+        checklist:[
+          'All steps and level changes lit, including once it gets dark',
+          'Cables, rugs, and decor kept clear of stairs and walkways',
+          'Uneven outdoor ground (holes, tree roots, loose paving) checked and marked or roped off',
+          'Handrails pointed out to guests who may need them'
+        ]
+      });
+    }
+
+    if(state.night){
+      mods.push({
+        id:'night', title:'Evening & night-time safety',
+        why:'The hazards already identified above (fire, water, steps, parking) get harder to see, not less dangerous, once the sun goes down.',
+        standards:[
+          {text:'Provide lighting along all walking routes, entrances, exits, and parking areas used after dark.', cite:'General event lighting and fall-prevention best practice.'}
+        ],
+        checklist:[
+          'Pathways, entrances, and exits lit for the full time guests will be arriving or leaving in the dark',
+          'Parking and driveway areas lit if guests will walk through them after dark',
+          'Torches or battery lanterns on hand in case of a power cut',
+          'A plan for how guests will find transport home safely once it\'s dark'
+        ]
+      });
+    }
+
+    if(state.noise){
+      mods.push({
+        id:'noise', title:'Loud music & sound',
+        why:'Nobody thinks of a party speaker the way they\'d think of a power tool, but sustained loud music can cause real hearing damage at surprisingly ordinary volumes.',
+        standards:[
+          {text:'Sustained exposure above <b>85 dBA</b> (roughly the volume of heavy traffic) for more than 8 hours carries hearing-damage risk. Each 3 dB increase halves the safe exposure time, so louder music for a shorter time still carries real risk.', cite:'NIOSH Recommended Exposure Limit for noise.'}
+        ],
+        checklist:[
+          'Speaker volume checked periodically, especially as a party gets louder over time',
+          'A quieter space available for guests (especially young children or elderly guests) to step away from the sound',
+          'Speakers positioned away from where children will be playing for extended periods',
+          'Local noise curfew or neighbour consideration checked for the event\'s end time'
+        ]
+      });
+    }
+
+    if(state.overnight){
+      mods.push({
+        id:'overnight', title:'Overnight stay or multi-day event',
+        why:'Fire, carbon monoxide, and supervision risks don\'t pause overnight, but everyone\'s attention does, which is exactly when they matter most.',
+        standards:[
+          {text:'Never leave a fire, braai, gas heater, or generator running unattended near sleeping guests or tents overnight.', cite:'General fire and carbon-monoxide safety practice, consistent with CPSC generator guidance.'}
+        ],
+        checklist:[
+          'All open flames, braais, and generators fully extinguished or shut down before anyone sleeps',
+          'A working smoke and/or CO alarm in any indoor sleeping space',
+          'Sleeping areas kept clear of the cooking/fire area and generator',
+          'A responsible adult identified for each overnight group of children',
+          'Emergency contacts and the nearest medical facility known before guests settle in for the night'
+        ]
+      });
+    }
+
+    if(state.fireworks){
+      mods.push({
+        id:'fireworks', title:'Fireworks & sparklers',
+        why:'Fireworks injuries spike every year at exactly the holidays people gather for, and sparklers, often handed straight to children as the "safe" option, cause a large share of them.',
+        standards:[
+          {text:'Sparklers burn at around <b>1,090&deg;C (2,000&deg;F)</b>, hot enough to melt some metals. They are not a safe firework to hand to young children.', cite:'US Consumer Product Safety Commission (CPSC) fireworks safety guidance.'},
+          {text:'Light one firework at a time on a flat, outdoor surface, then move back immediately. Never relight a dud, and never point or throw fireworks at people, animals, or structures.', cite:'CPSC fireworks safety guidance.'},
+          {text:'Keep a bucket of water or a hose within reach the entire time fireworks are in use.', cite:'CPSC fireworks safety guidance.'}
+        ],
+        checklist:[
+          'Fireworks used only outdoors, on a flat, clear surface away from dry grass, decor, and structures',
+          'Sparklers kept away from young children; handed out only to sober adults if used at all',
+          'Only one firework lit at a time, by one designated sober adult',
+          'A bucket of water or a hose kept within reach for the entire time',
+          'Duds left alone, never relit, and soaked in water before disposal',
+          'Local fireworks rules checked, some areas restrict or ban private fireworks entirely'
+        ]
+      });
+    }
+
+    if(state.turkey_fryer){
+      mods.push({
+        id:'turkey_fryer', title:'Deep-fat turkey fryer',
+        why:'A turkey fryer turns an ordinary appliance into one of the most dangerous pieces of equipment used at any holiday gathering, and it is almost always the same preventable mistake that causes it.',
+        standards:[
+          {text:'Fully thaw and dry the turkey before frying. USDA guidance is roughly <b>24 hours of thawing per 2 kg (4-5 lb)</b>. A partly frozen or wet turkey causes violent oil splatter when lowered in.', cite:'USDA / CPSC turkey fryer safety guidance.'},
+          {text:'Set the fryer up outdoors, on a flat surface, well away from the house, garage, fences, or anything that can catch fire, never on a deck, porch, or inside a garage.', cite:'CPSC turkey fryer safety guidance.'},
+          {text:'Watch the oil closely. If it starts smoking at all, turn the burner off immediately, the oil is overheating.', cite:'CPSC turkey fryer safety guidance.'}
+        ],
+        checklist:[
+          'Turkey fully thawed and patted dry before it goes anywhere near the oil',
+          'Fryer set up outdoors on a flat surface, well away from the house, garage, and fences',
+          'Oil fill level checked beforehand so it won\'t overflow once the turkey is lowered in',
+          'Fryer never left unattended while in use',
+          'A grease-rated (Class B/K) fire extinguisher nearby, never water, on an oil fire',
+          'Children and pets kept well away from the fryer at all times'
+        ]
+      });
+    }
+
+    // crowd density module if size + venue provided
+    var size = parseFloat(state.venueSize);
+    var guests = parseInt(state.guestCount, 10);
+    if(size && guests){
+      var sqm = state.venueUnit === 'sqft' ? size * 0.092903 : size;
+      var density = guests / sqm;
+      var densityTxt = density.toFixed(2);
+      var verdict, verdictClass;
+      if(density <= 2){ verdict = 'Comfortable density for a standing/mixed gathering.'; verdictClass='ok'; }
+      else if(density <= 4.7){ verdict = 'Within common event-safety guidance for standing areas, but getting busy. Plan clear exit routes.'; verdictClass='warn'; }
+      else { verdict = 'Above the commonly used upper limit for standing crowd safety. Consider a larger venue or a lower guest cap.'; verdictClass='alert'; }
+
+      mods.push({
+        id:'crowd', title:'Crowd density',
+        why:'Nobody plans a birthday party or reunion by calculating people per square metre, yet overcrowding is a documented cause of falls, crush injuries, and blocked exits at gatherings of every size.',
+        standards:[
+          {text:'A commonly used comfort benchmark for standing events is around <b>2 people per m&sup2; (about 5.4 ft&sup2; per person)</b>. Widely referenced guidance treats <b>5 people per m&sup2;</b> as the upper safety limit for standing areas.', cite:'UK Event Safety Guide / Purple Guide crowd density benchmarks; crowd science referenced widely in event safety planning (G. Keith Still).'}
+        ],
+        checklist:[
+          'Your estimated density: <b>'+densityTxt+' people per m&sup2;</b> &middot; '+verdict,
+          'At least two separate, unobstructed exit routes identified for the guest count above',
+          'Furniture and decor arranged so no single pinch point forms near entrances or food/bar areas',
+          'Guest count re-checked against actual space if the event grows beyond your original plan'
+        ],
+        customVerdictClass: verdictClass
+      });
+    }
+
+    return mods;
+  }
+
+  // ---------- render ----------
+  var modulesWrap = document.getElementById('modulesWrap');
+  var dashCard = document.getElementById('dashCard');
+  var dashList = document.getElementById('dashList');
+  var scoreNum = document.getElementById('scoreNum');
+  var miniPct = document.getElementById('miniPct');
+  var ringFg = document.getElementById('ringFg');
+  var CIRC = 2 * Math.PI * 46;
+
+  var STATE_KEY = 'espn_state';
+  function loadState(){
+    try{ return JSON.parse(localStorage.getItem(STATE_KEY) || '{}'); }catch(e){ return {}; }
+  }
+  function saveState(s){
+    try{ localStorage.setItem(STATE_KEY, JSON.stringify(s)); }catch(e){}
+  }
+
+  var currentModules = [];
+  var checks = loadState().checks || {};
+
+  function render(){
+    modulesWrap.innerHTML = '';
+    if(currentModules.length === 0){
+      modulesWrap.innerHTML = '<div class="empty-state">Select what\'s part of your gathering above, then build your plan.</div>';
+      dashCard.style.display = 'none';
+      return;
+    }
+    dashCard.style.display = 'block';
+
+    currentModules.forEach(function(mod, i){
+      var box = document.createElement('div');
+      box.className = 'module' + (i === 0 ? ' open' : '');
+      box.style.setProperty('--m-accent', ACCENTS[mod.id] || 'var(--sage)');
+      var standardsHtml = mod.standards.map(function(s){
+        return '<div class="standard">'+s.text+'<cite>'+s.cite+'</cite></div>';
+      }).join('');
+      var checklistHtml = mod.checklist.map(function(item, idx){
+        var cid = mod.id + '_' + idx;
+        var checked = checks[cid] ? 'checked' : '';
+        return '<li><input type="checkbox" id="'+cid+'" data-cid="'+cid+'" '+checked+'><label for="'+cid+'">'+item+'</label></li>';
+      }).join('');
+      box.innerHTML =
+        '<div class="module-head">'+
+          '<div class="mh-left"><div class="m-icon">'+(ICONS[mod.id]||'')+'</div><h4>'+mod.title+'</h4></div>'+
+          '<div class="mh-right"><span class="pill mod-pill" data-mod="'+mod.id+'"></span><span class="arrow">&#9656;</span></div>'+
+        '</div>'+
+        '<div class="module-body">'+
+          '<div class="why">'+mod.why+'</div>'+
+          standardsHtml+
+          '<ul class="checklist">'+checklistHtml+'</ul>'+
+        '</div>';
+      box.querySelector('.module-head').addEventListener('click', function(){
+        box.classList.toggle('open');
+      });
+      modulesWrap.appendChild(box);
+    });
+
+    modulesWrap.querySelectorAll('input[type=checkbox][data-cid]').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        checks[cb.getAttribute('data-cid')] = cb.checked;
+        saveState({checks: checks, toggles: getToggleState(), guestCount: document.getElementById('guestCount').value, venueType: document.getElementById('venueType').value, venueSize: document.getElementById('venueSize').value, venueUnit: document.getElementById('venueUnit').value});
+        updateDash();
+      });
+    });
+
+    updateDash();
+  }
+
+  function updateDash(){
+    var total = 0, done = 0;
+    var list = [];
+    currentModules.forEach(function(mod){
+      var modDone = 0;
+      mod.checklist.forEach(function(item, idx){
+        var cid = mod.id + '_' + idx;
+        total++;
+        if(checks[cid]){ done++; modDone++; }
+      });
+      var pct = Math.round((modDone / mod.checklist.length) * 100);
+      var cls = pct === 100 ? 'ok' : (pct >= 40 ? 'warn' : 'alert');
+      list.push('<div class="dash-item"><span>'+mod.title+'</span><span class="pill '+cls+'">'+pct+'%</span></div>');
+      var headPill = modulesWrap.querySelector('.mod-pill[data-mod="'+mod.id+'"]');
+      if(headPill){ headPill.textContent = pct + '%'; headPill.className = 'pill mod-pill ' + cls; headPill.setAttribute('data-mod', mod.id); }
+    });
+    dashList.innerHTML = list.join('');
+    var overall = total ? Math.round((done/total)*100) : 0;
+    scoreNum.textContent = overall + '%';
+    var offset = CIRC - (CIRC * overall / 100);
+    ringFg.setAttribute('stroke-dashoffset', offset);
+    var overallCls = overall === 100 ? 'ok' : (overall >= 40 ? 'warn' : 'alert');
+    miniPct.textContent = overall + '% ready';
+    miniPct.className = 'mini-pct ' + overallCls;
+  }
+
+  function getToggleState(){
+    var s = {};
+    document.querySelectorAll('#toggleGrid input[type=checkbox]').forEach(function(cb){
+      s[cb.getAttribute('data-id')] = cb.checked;
+    });
+    return s;
+  }
+
+  document.getElementById('buildBtn').addEventListener('click', function(){
+    var s = getToggleState();
+    s.guestCount = document.getElementById('guestCount').value;
+    s.venueType = document.getElementById('venueType').value;
+    s.venueSize = document.getElementById('venueSize').value;
+    s.venueUnit = document.getElementById('venueUnit').value;
+    currentModules = buildModules(s);
+    saveState({checks: checks, toggles: getToggleState(), guestCount: s.guestCount, venueType: s.venueType, venueSize: s.venueSize, venueUnit: s.venueUnit});
+    render();
+    dashCard.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  // ---------- event planning checklist (non-HSE, separate tab) ----------
+  var PLAN_SECTIONS = [
+    {title:'Guest list & invitations', items:[
+      'Guest list finalised with a realistic headcount',
+      'Invitations sent with date, time, address, and parking info',
+      'RSVP deadline set and tracked',
+      'Dietary needs and allergies collected from guests'
+    ]},
+    {title:'Venue & date', items:[
+      'Venue or space booked and confirmed in writing',
+      'Backup plan in place for weather (if outdoors)',
+      'Permissions checked (noise, alcohol, venue rules) if not at home',
+      'Load-in and load-out times confirmed'
+    ]},
+    {title:'Food & drink', items:[
+      'Menu planned and matched against guest dietary needs',
+      'Quantities calculated for the final headcount',
+      'Serving equipment (platters, coolers, warming trays) sorted',
+      'Drinks and ice quantities planned'
+    ]},
+    {title:'Decor & theme', items:[
+      'Theme and colour scheme decided',
+      'Decor sourced or ordered with delivery time buffer',
+      'Seating and table plan sketched out',
+      'Signage or wayfinding for guests planned if needed'
+    ]},
+    {title:'Entertainment & activities', items:[
+      'Music or entertainment booked/confirmed',
+      'Activities or games planned for the age range attending',
+      'Timeline of key moments (cake, speeches, first dance, etc) drafted',
+      'Photographer or designated photo-taker arranged'
+    ]},
+    {title:'On the day', items:[
+      'Setup team and timings assigned',
+      'A run sheet shared with anyone helping host',
+      'Someone assigned to greet and direct guests on arrival',
+      'Cleanup plan and helpers arranged for after the event'
+    ]},
+    {title:'Budget & wrap-up', items:[
+      'Overall budget tracked against actual spend',
+      'Rental/hire items scheduled for return',
+      'Thank-you messages or notes planned for guests/helpers',
+      'Photos and memories saved somewhere everyone can access'
+    ]}
+  ];
+
+  var PLAN_KEY = 'espn_plan_checks';
+  function loadPlanChecks(){
+    try{ return JSON.parse(localStorage.getItem(PLAN_KEY) || '{}'); }catch(e){ return {}; }
+  }
+  function savePlanChecks(c){
+    try{ localStorage.setItem(PLAN_KEY, JSON.stringify(c)); }catch(e){}
+  }
+  var planRingFg = document.getElementById('planRingFg');
+  var planScoreNum = document.getElementById('planScoreNum');
+  var planDashList = document.getElementById('planDashList');
+  var planMiniPct = document.getElementById('planMiniPct');
+
+  function updatePlanDash(planChecks){
+    var listHtml = [];
+    var totalAll = 0, doneAll = 0;
+    PLAN_SECTIONS.forEach(function(sec, si){
+      var secTotal = sec.items.length, secDone = 0;
+      sec.items.forEach(function(item, ii){
+        if(planChecks['plan_'+si+'_'+ii]){ secDone++; }
+      });
+      totalAll += secTotal; doneAll += secDone;
+      var pct = Math.round((secDone/secTotal)*100);
+      var cls = pct === 100 ? 'ok' : (pct >= 40 ? 'warn' : 'alert');
+      listHtml.push('<div class="dash-item"><span>'+sec.title+'</span><span class="pill '+cls+'">'+pct+'%</span></div>');
+    });
+    planDashList.innerHTML = listHtml.join('');
+    var overall = totalAll ? Math.round((doneAll/totalAll)*100) : 0;
+    planScoreNum.textContent = overall + '%';
+    planRingFg.setAttribute('stroke-dashoffset', CIRC - (CIRC * overall / 100));
+    var overallCls = overall === 100 ? 'ok' : (overall >= 40 ? 'warn' : 'alert');
+    planMiniPct.textContent = overall + '% planned';
+    planMiniPct.className = 'mini-pct ' + overallCls;
+  }
+
+  (function renderPlan(){
+    var planChecks = loadPlanChecks();
+    var wrap = document.getElementById('planWrap');
+    var html = '';
+    PLAN_SECTIONS.forEach(function(sec, si){
+      html += '<div class="plan-section"><h4>'+sec.title+'</h4><ul class="checklist">';
+      sec.items.forEach(function(item, ii){
+        var cid = 'plan_'+si+'_'+ii;
+        var checked = planChecks[cid] ? 'checked' : '';
+        html += '<li><input type="checkbox" id="'+cid+'" data-pid="'+cid+'" '+checked+'><label for="'+cid+'">'+item+'</label></li>';
+      });
+      html += '</ul></div>';
+    });
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('input[data-pid]').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        planChecks[cb.getAttribute('data-pid')] = cb.checked;
+        savePlanChecks(planChecks);
+        updatePlanDash(planChecks);
+      });
+    });
+    updatePlanDash(planChecks);
+  })();
+
+
+  // ---------- typical traditions ----------
+  var TRAD_ITEMS = [{"name": "The midnight countdown toast", "note": "A shared toast at midnight, often with champagne or sparkling wine.", "tag": "alcohol", "safety": "Always have a non-alcoholic sparkling option for the toast, and if opening champagne, point the bottle away from faces and open it with a cloth over the cork - it can travel at enough force to cause an eye injury."}, {"name": "Fireworks display", "note": "A public or private fireworks show to mark the new year.", "tag": "fire", "safety": "Check local rules before lighting any consumer fireworks yourself. If attending a display, keep young children back from the launch area and be mindful that alcohol and firework-lighting don't mix (CPSC guidance)."}, {"name": "Party poppers and confetti cannons", "note": "Small handheld pyrotechnic or compressed-air poppers set off at midnight.", "safety": "Point poppers away from faces and eyes - they're a genuine eye-injury risk at close range - and sweep up small confetti and streamer pieces promptly if young children or pets are around."}, {"name": "A late-night gathering", "note": "NYE gatherings typically run well past a normal bedtime or usual departure time.", "safety": "Arrange a sober driver or rideshare plan before the night starts, not after - decision-making about driving gets noticeably worse the longer a late-night gathering with alcohol runs."}, {"name": "Alcohol service through the evening", "note": "Drinks typically flow for several hours leading up to midnight.", "tag": "alcohol", "safety": "Serve food throughout the evening rather than just at the start, keep water and non-alcoholic options visibly available, and have a plan for cutting off service well before guests are due to drive."}, {"name": "Dancing in a crowded space", "note": "A packed living room or rented venue floor as midnight approaches.", "safety": "Clear breakables and trailing cables from the dance area in advance, and keep the space below a comfortable crowd density so a sudden midnight surge toward the space doesn't create a crush."}, {"name": "Sparklers at midnight", "note": "Handheld sparklers lit as part of the countdown celebration.", "tag": "fire", "safety": "Keep a water bucket ready for cooling and disposal, light one sparkler from another already lit rather than from a lighter near a crowd, and don't hand one to a child under 5 (CPSC guidance)."}];
+  var TRAD_INTRO = "The traditions that anchor most New Year's Eve gatherings - add your own.";
+  var TRAD_CUSTOM_KEY = 'espn_traditions_custom';
+  document.getElementById('tradIntro').textContent = TRAD_INTRO;
+
+  function loadCustomTraditions(){
+    try{ return JSON.parse(localStorage.getItem(TRAD_CUSTOM_KEY) || '[]'); }catch(e){ return []; }
+  }
+  function saveCustomTraditions(list){
+    try{ localStorage.setItem(TRAD_CUSTOM_KEY, JSON.stringify(list)); }catch(e){}
+  }
+
+  function renderTraditions(){
+    var wrap = document.getElementById('tradList');
+    var custom = loadCustomTraditions();
+    var html = '';
+    TRAD_ITEMS.forEach(function(t){
+      html += '<div class="trad-card"><h4>'+t.name+'</h4><p class="trad-note">'+t.note+'</p><p class="trad-safety"><b>Keep it safe: </b>'+t.safety+'</p></div>';
+    });
+    custom.forEach(function(t, i){
+      html += '<div class="trad-card trad-custom"><button class="trad-del" data-ci="'+i+'" title="Remove">Remove</button><h4>'+escapeHtml(t.name)+'</h4><p class="trad-safety"><b>Keep it safe: </b>'+escapeHtml(t.safety)+'</p></div>';
+    });
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.trad-del').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var idx = parseInt(btn.getAttribute('data-ci'), 10);
+        var list = loadCustomTraditions();
+        list.splice(idx, 1);
+        saveCustomTraditions(list);
+        renderTraditions();
+      });
+    });
+  }
+  function escapeHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  document.getElementById('tradAddBtn').addEventListener('click', function(){
+    var nameEl = document.getElementById('tradNameInput');
+    var safetyEl = document.getElementById('tradSafetyInput');
+    var name = nameEl.value.trim();
+    var safety = safetyEl.value.trim();
+    if(!name || !safety){ return; }
+    var list = loadCustomTraditions();
+    list.push({name:name, safety:safety});
+    saveCustomTraditions(list);
+    nameEl.value = '';
+    safetyEl.value = '';
+    renderTraditions();
+  });
+  renderTraditions();
+
+  // restore previous session
+  (function restore(){
+    var saved = loadState();
+    if(!saved.toggles && DEFAULT_TOGGLES.length){
+      saved.toggles = {};
+      DEFAULT_TOGGLES.forEach(function(id){ saved.toggles[id] = true; });
+    }
+    if(saved.toggles){
+      Object.keys(saved.toggles).forEach(function(id){
+        if(saved.toggles[id]){
+          var cb = document.querySelector('#toggleGrid input[data-id="'+id+'"]');
+          if(cb){ cb.checked = true; cb.closest('.toggle').classList.add('active'); }
+        }
+      });
+    }
+    if(saved.guestCount) document.getElementById('guestCount').value = saved.guestCount;
+    if(saved.venueType) document.getElementById('venueType').value = saved.venueType;
+    if(saved.venueSize) document.getElementById('venueSize').value = saved.venueSize;
+    if(saved.venueUnit) document.getElementById('venueUnit').value = saved.venueUnit;
+    if(saved.toggles && Object.keys(saved.toggles).some(function(k){return saved.toggles[k];})){
+      var s = Object.assign({}, saved.toggles, {guestCount:saved.guestCount, venueType:saved.venueType, venueSize:saved.venueSize, venueUnit:saved.venueUnit});
+      currentModules = buildModules(s);
+      render();
+    } else {
+      render();
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
