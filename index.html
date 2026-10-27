@@ -433,7 +433,7 @@
   <section class="card" id="localRulesCard">
       <h3>Rules where you live</h3>
       <p class="sub">The safety advice in this planner applies everywhere. These notes cover what differs between countries. Rules change, so always confirm with your local authority.</p>
-      <ul style="padding-left:18px;margin:0;font-size:.9rem"><li style="margin-bottom:8px"><b>Emergency numbers:</b> South Africa: 10111 (police), 10177 (ambulance and fire), 112 from a mobile phone. Saudi Arabia: 911 or 999 (police), 997 (ambulance), 998 (civil defence and fire). UAE: 999 (police), 998 (ambulance), 997 (civil defence and fire). UK: 999 or 112. US and Canada: 911. Australia: 000. Save your local number in your phone today.<br><span style="font-size:.8rem;opacity:.8">Source: <a href="https://visit.gauteng.net/legal/emergency-contacts" target="_blank" rel="noopener">Gauteng Tourism - Emergency contacts (South Africa)</a> &middot; <a href="https://expatica.com/sa/healthcare/healthcare-basics/emergency-numbers-and-services-in-saudi-arabia-70990" target="_blank" rel="noopener">Expatica - Emergency numbers in Saudi Arabia (updated Apr 2025)</a> &middot; <a href="https://u.ae/en/information-and-services/justice-safety-and-the-law/handling-emergencies" target="_blank" rel="noopener">UAE Government portal - Handling emergencies</a></span></li><li style="margin-bottom:8px"><b>UAE electricity emergency:</b> Call 991 for electricity emergencies (Abu Dhabi: 800 2332).<br><span style="font-size:.8rem;opacity:.8">Source: <a href="https://u.ae/en/information-and-services/justice-safety-and-the-law/handling-emergencies" target="_blank" rel="noopener">UAE Government portal - Handling emergencies</a></span></li><li style="margin-bottom:8px"><b>Permits and local restrictions:</b> Fireworks, open fires, generators, bouncy castles, road closures and larger or public events often need a permit, or are restricted, and the rules differ between countries and cities. Check with your local municipality, fire department or civil defence before the event.<br><span style="font-size:.8rem;opacity:.8">Source: Professional practice</span></li></ul>
+      <ul style="padding-left:18px;margin:0;font-size:.9rem"><li style="margin-bottom:8px"><b>Your emergency numbers:</b> Emergency numbers differ between countries and can change, so add your own local numbers here. Find them on your government or emergency services website, and save them in your phone too. They are saved with your other information and included in your backup file.<div class="tst-nums"></div></li><li style="margin-bottom:8px"><b>Permits and local restrictions:</b> Fireworks, open fires, generators, bouncy castles, road closures and larger or public events often need a permit, or are restricted, and the rules differ between countries and cities. Check with your local municipality, fire department or civil defence before the event.<br><span style="font-size:.8rem;opacity:.8">Source: Professional practice</span></li></ul>
     </section>
 
   <footer>
@@ -1296,6 +1296,60 @@
   window.TST_SAFE = { id: ID, accent: '#7c8b6f', backup: backup, restore: function(){ fileIn.click(); } };
 })();
 </script>
+<!-- ===== The Snag Tag - Your emergency numbers ===== -->
+<style>
+.tst-nums{margin:8px 0 2px}
+.tst-nums .r{display:flex;gap:6px;margin:0 0 6px;flex-wrap:wrap}
+.tst-nums input{font:inherit;font-size:14px;padding:7px 9px;border:1px solid rgba(127,127,127,.45);border-radius:8px;background:transparent;color:inherit;min-width:0}
+.tst-nums input.l{flex:1 1 130px}
+.tst-nums input.n{flex:1 1 130px}
+.tst-nums button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px;padding:6px 10px;border:1px solid var(--tst-nacc,#666);background:transparent;color:var(--tst-nacc,#444)}
+.tst-nums button.x{padding:6px 9px}
+</style>
+<script>
+(function(){
+ var KEY = 'espn_mynums';
+ var DEF = ['Police','Ambulance','Fire','Electricity emergency','Gas emergency','Doctor'];
+ function get(){ try{ var v = JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(v)) return v; }catch(e){} return null; }
+ function set(v){ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+ function list(){ return get() || DEF.map(function(l){ return {l:l, n:''}; }); }
+ window.tstNumsAdd = function(S){ var o = {}; for(var k in S) o[k] = S[k]; o.tstMyNums = get() || []; return o; };
+ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+ function render(){
+  var a = (window.TST_SAFE && window.TST_SAFE.accent) || '';
+  [].forEach.call(document.querySelectorAll('.tst-nums'), function(box){
+   if(a) box.style.setProperty('--tst-nacc', a);
+   var v = list();
+   box.innerHTML = v.map(function(x, i){
+    return '<div class="r"><input class="l" data-i="'+i+'" aria-label="Who to call" placeholder="Who to call" value="'+esc(x.l)+'">'
+     + '<input class="n" data-i="'+i+'" type="tel" aria-label="Phone number" placeholder="Phone number" value="'+esc(x.n)+'">'
+     + '<button type="button" class="x" data-del="'+i+'" aria-label="Remove this row">&times;</button></div>';
+   }).join('') + '<button type="button" data-add="1">+ Add a number</button>';
+  });
+ }
+ document.addEventListener('input', function(e){
+  var t = e.target; if(!t.closest || !t.closest('.tst-nums')) return;
+  var v = list(), i = +t.getAttribute('data-i'); if(!v[i]) return;
+  v[i][t.classList.contains('l') ? 'l' : 'n'] = t.value; set(v);
+ });
+ document.addEventListener('click', function(e){
+  var t = e.target; if(!t.closest || !t.closest('.tst-nums')) return;
+  var v = list();
+  if(t.getAttribute('data-add')){ v.push({l:'', n:''}); set(v); render(); }
+  else if(t.getAttribute('data-del') != null){ v.splice(+t.getAttribute('data-del'), 1); set(v); render(); }
+ });
+ window.addEventListener('storage', function(e){ if(e.key === KEY) render(); });
+ var imp = document.getElementById('importFile');
+ if(imp) imp.addEventListener('change', function(){
+  var f = this.files && this.files[0]; if(!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){ try{ var o = JSON.parse(rd.result); if(o && Array.isArray(o.tstMyNums)){ set(o.tstMyNums); render(); } }catch(e){} };
+  rd.readAsText(f);
+ }, true);
+ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
+</script>
+<!-- ===== end Your emergency numbers ===== -->
 <!-- ===== The Snag Tag - Data Safety Notice (shared across all products) ===== -->
 <style>
 #tst-safe{position:fixed;inset:0;z-index:2147483000;background:rgba(30,24,16,.55);display:none;align-items:center;justify-content:center;padding:16px;font-family:Inter,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
